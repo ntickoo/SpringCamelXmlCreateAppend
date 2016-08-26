@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       ">
+
+	<bean id="xmlAppenderBean" class="com.nt.camel.learn.mergexml.XmlAppenderProcessor">
+		<property name="batchFileLocation" value="${input.folder}"/>
+	</bean>
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring">
+		<propertyPlaceholder id="properties" location="META-INF/projectConfig.properties"/>
+		<route>
+			<from uri="file:{{input.folder}}?include=msg.*.xml&amp;noop=true"></from>
+			<process ref="xmlAppenderBean"></process>
+		</route>
+	</camelContext>
+</beans>
